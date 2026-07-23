@@ -7,6 +7,7 @@ const app = express();
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
+app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -15,7 +16,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/new", (req, res) => {
-  res.send("What you saying my g");
+  res.render("new");
+});
+
+app.post("/new", (req, res) => {
+  const { user, text } = req.body;
+
+  messages.push({
+    text: text,
+    user: user,
+    added: new Date()
+  });
+
+  res.redirect("/");
 });
 
 const PORT = 6969;

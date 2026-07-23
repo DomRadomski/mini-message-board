@@ -5,16 +5,18 @@
   <title>Messages</title>
 </head>
 <body>
-  <h1>Messages</h1>
 
-  <ul>
+<%- include('header') %>
+<h1>Messages</h1>
+
+    <ul>
     <% messages.forEach(function(message) { %>
-      <li>
+        <li>
         <strong><%= message.user %></strong>: <%= message.text %>
         <br>
         <small><%= message.added.toLocaleString() %></small>
-      </li>
+        </li>
     <% }); %>
-  </ul>
+    </ul>
 </body>
 </html>
