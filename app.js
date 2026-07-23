@@ -1,6 +1,7 @@
 // app.js
 const path = require("node:path");
 const express = require("express");
+const messages = require("./messages");
 
 const app = express();
 
@@ -10,7 +11,11 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.send("Wagwarn General");
+  res.render("index", { messages });
+});
+
+app.get("/new", (req, res) => {
+  res.send("What you saying my g");
 });
 
 const PORT = 6969;

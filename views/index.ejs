@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages</title>
+</head>
+<body>
+  <h1>Messages</h1>
+
+  <ul>
+    <% messages.forEach(function(message) { %>
+      <li>
+        <strong><%= message.user %></strong>: <%= message.text %>
+        <br>
+        <small><%= message.added.toLocaleString() %></small>
+      </li>
+    <% }); %>
+  </ul>
+</body>
+</html>
