@@ -5,6 +5,8 @@ const messages = require("./messages");
 
 const app = express();
 
+let nextMessageId = 11;
+
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 app.use(express.urlencoded({ extended: true }));
@@ -13,6 +15,16 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   res.render("index", { messages });
+});
+
+app.get("/message/:messageId", (req, res) => {
+  const message = messages.find(m => m.id === Number(req.params.messageId));
+
+  if (!message) {
+    return res.status(404).send("Message not found");
+  }
+
+  res.render("message", { message });
 });
 
 app.get("/new", (req, res) => {
@@ -25,8 +37,11 @@ app.post("/new", (req, res) => {
   messages.push({
     text: text,
     user: user,
-    added: new Date()
+    added: new Date(),
+    id: nextMessageId
   });
+
+  nextMessageId++
 
   res.redirect("/");
 });

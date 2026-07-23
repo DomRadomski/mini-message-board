@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages</title>
+</head>
+<body>
+
+<%- include('header') %>
+
+<h2><%= message.user %></h2>
+<p><%= message.text %></p>
+<small><%= message.added.toLocaleString() %></small>
+
+</body>
+</html>
