@@ -7,7 +7,7 @@ async function getAllMessages() {
 
 async function getMessageById(id) {
     const { rows } = await pool.query("SELECT * FROM posted_messages WHERE id = $1", [id]);
-    return rows;
+    return rows[0];
 }
 
 async function insertMessage(text, username) {
