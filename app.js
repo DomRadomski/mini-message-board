@@ -1,11 +1,10 @@
 // app.js
 const path = require("node:path");
 const express = require("express");
-const messages = require("./messages");
+const { body, validationResult } = require("express-validator");
+const db = require("./db/queries");
 
 const app = express();
-
-let nextMessageId = 11;
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
@@ -13,14 +12,19 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
+
+// getAllMessages
+app.get("/", async (req, res) => {
+  const messages = await db.getAllMessages()
   res.render("index", { messages });
 });
 
-app.get("/message/:messageId", (req, res) => {
-  const message = messages.find(m => m.id === Number(req.params.messageId));
+// get individual message
+app.get("/message/:messageId", async (req, res) => {
+  const id = req.params.messageId;
+  const message = await db.getMessageById(id);
 
-  if (!message) {
+  if (message.length === 0) {
     return res.status(404).send("Message not found");
   }
 
@@ -31,20 +35,12 @@ app.get("/new", (req, res) => {
   res.render("new");
 });
 
-app.post("/new", (req, res) => {
+//addNewMessage
+app.post("/new", async (req, res) => {
   const { user, text } = req.body;
-
-  messages.push({
-    text: text,
-    user: user,
-    added: new Date(),
-    id: nextMessageId
-  });
-
-  nextMessageId++
-
+  await db.insertMessage(text, user)
   res.redirect("/");
-});
+})
 
 const PORT = 6969;
 app.listen(PORT, () => {
