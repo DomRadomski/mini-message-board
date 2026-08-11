@@ -35,12 +35,31 @@ app.get("/new", (req, res) => {
   res.render("new");
 });
 
-//addNewMessage
-app.post("/new", async (req, res) => {
+const validateMessage = [
+  body("user")
+    .trim()
+    .isAlpha().withMessage("must only contain letters")
+    .isLength({ min: 1, max: 10 }).withMessage(`must be between 1 & 10 characters long`),
+  body("text")
+    .trim()
+    .isLength({ min: 1, max: 50 }).withMessage(`must be between 1 & 50 characters long`),
+
+]
+
+app.post("/new", [validateMessage, async (req, res) => {
   const { user, text } = req.body;
-  await db.insertMessage(text, user)
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render("new", {
+      title: "Message",
+      errors: errors.array(),
+    });
+  }
+
+  await db.insertMessage(text, user);
   res.redirect("/");
-})
+}]);
 
 const PORT = 6969;
 app.listen(PORT, () => {
