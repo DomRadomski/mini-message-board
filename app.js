@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 // getAllMessages
 app.get("/", async (req, res) => {
   const messages = await db.getAllMessages()
+  console.log(messages)
   res.render("index", { messages });
 });
 
